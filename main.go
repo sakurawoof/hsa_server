@@ -19,7 +19,6 @@ const (
 	CacheDuration = 24 * time.Hour // since the airtable is static, this doesn't currently matter
 )
 
-// Structure of the Airtable API response
 type AirtableResponse struct {
 	Records []struct {
 		Fields Employee `json:"fields"`
@@ -60,7 +59,6 @@ func fetchFromAPI() ([]byte, error) {
 		return nil, err
 	}
 
-	// Set the authorization header
 	req.Header.Add("Authorization", "Bearer "+apiKey)
 
 	// Make the API request
@@ -74,7 +72,7 @@ func fetchFromAPI() ([]byte, error) {
 	return ioutil.ReadAll(resp.Body)
 }
 
-// parseResponse parses the API response and updates the cache
+// parses the API response and updates the cache
 func parseResponse(body []byte) ([]Employee, error) {
 	var airtableResp AirtableResponse
 	err := json.Unmarshal(body, &airtableResp)
@@ -96,7 +94,7 @@ func parseResponse(body []byte) ([]Employee, error) {
 	return employees, nil
 }
 
-// fetchEmployeeData retrieves employee data from the cache or Airtable API
+// retrieves employee data from the cache or Airtable API
 func fetchEmployeeData() ([]Employee, error) {
 	// First, try to get data from the cache
 	if cachedData, found := checkCache(); found {
@@ -139,7 +137,7 @@ func main() {
 	// Get port from environment variable or use default
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080" // default port if not specified
+		port = "8080"
 	}
 
 	fmt.Printf("Server is running on http://localhost:%s\n", port)
