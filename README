@@ -1,0 +1,53 @@
+1. Clone the repository:
+   ```
+   git clone <your-repository-url>
+   cd <repository-directory>
+   ```
+
+2. Install dependencies:
+  
+   golang directions: https://go.dev/doc/install
+   ```
+   go get github.com/gin-gonic/gin
+   go get github.com/joho/godotenv
+   ```
+
+3. Create a `.env` file in the project root with your Airtable API credentials:
+   ```
+   API_URL=https://api.airtable.com/v0/appekA493GuXz8uDK/tbllLFdZDMfLjAT4N
+   API_KEY=your_airtable_api_key
+   PORT=8080
+   ```
+   Replace `your_airtable_api_key` with your actual Airtable API key.
+
+## Running the Application
+
+1. From the project root directory, run:
+   ```
+   go run .
+   ```
+
+2. You should see output indicating the server is running:
+   ```
+   Server is running on http://localhost:8080
+   ```
+
+## Viewing the Dashboard
+
+Open a browser and navigate to:
+```
+http://localhost:8080
+```
+
+Followups for productionization:
+
+1. API robustness for scaling
+
+ We need to support pagination and enable retries for supporting payroll backends containing millions of employees. If employee count is very large relative to page size cap, we would want to either cache the paginated responses (and update our local state incrementally) to avoid having to re-query the vendor's endpoint in its entirety if there is some network or business logic failure encountered. 
+
+2.  Managing State
+
+If we want our app to not be just read only, but also track changes to employee's finances/healthcare status, we should have a persistence layer to represent employees and their state changes. Employees can be represented as entities in a relational database (e.g. postgresql), changes/events can be tracked by writing to an append only ledger, and relevant balances (e.g. amount spend toward deductible in a given year) can be computed by aggregating over those events.
+
+
+
