@@ -33,8 +33,10 @@ type Employee struct {
 	HSAMaxContribution int
 }
 
-// calculateAge calculates the age of an employee based on their date of birth
 func calculateAge(dateOfBirth string) (int, error) {
+	// Use a layout string to specify the expected date format
+	// "2006-01-02" is Go's reference date used for parsing
+	// It doesn't represent any actual date, just the format
 	dob, err := time.Parse("2006-01-02", dateOfBirth)
 	if err != nil {
 		return 0, err
@@ -51,12 +53,10 @@ func calculateAge(dateOfBirth string) (int, error) {
 	return age, nil
 }
 
-// IsHSAEligible determines if an employee is eligible for an HSA based on their plan type and deductible
 func IsHSAEligible(planType string, deductible int) bool {
 	return deductible >= HDHPMinimumDeductible[planType]
 }
 
-// CalculateHSAMaxContribution calculates the maximum HSA contribution for an employee
 func CalculateHSAMaxContribution(planType, dateOfBirth string) (int, error) {
 	maxContribution, exists := HSAContributionLimit[planType]
 	if !exists {
@@ -76,7 +76,7 @@ func CalculateHSAMaxContribution(planType, dateOfBirth string) (int, error) {
 	return maxContribution, nil
 }
 
-// ProcessEmployeeData calculates HSA eligibility and maximum contributions for each employee
+// calculates HSA eligibility and maximum contributions for each employee
 func ProcessEmployeeData(employees []Employee) []Employee {
 	for i, emp := range employees {
 		employees[i].HSAEligible = IsHSAEligible(emp.PlanType, emp.Deductible)
@@ -91,10 +91,6 @@ func ProcessEmployeeData(employees []Employee) []Employee {
 		} else {
 			employees[i].HSAMaxContribution = 0
 		}
-
-		// Debug output for each employee
-		fmt.Printf("Employee: %s, Plan Type: %s, Deductible: %d, DOB: %s, HSA Eligible: %v, Max Contribution: %d\n",
-			emp.Name, emp.PlanType, emp.Deductible, emp.DateOfBirth, employees[i].HSAEligible, employees[i].HSAMaxContribution)
 	}
 	return employees
 }
