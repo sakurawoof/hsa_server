@@ -44,6 +44,7 @@ Followups for productionization:
 1. API robustness for scaling
 
  We need to support pagination and enable retries for supporting payroll backends containing millions of employees. If employee count is very large relative to page size cap, we would want to either cache the paginated responses (and update our local state incrementally) to avoid having to re-query the vendor's endpoint in its entirety if there is some network or business logic failure encountered. 
+Authentication/rate limiting for inbound traffic to our site should also be considered.
 
 2.  Managing State
 
